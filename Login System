@@ -1,1 +1,143 @@
+#include <iostream>
+#include <fstream>
+#include <limits>
+#include <string>
+#include <regex>
+#include <vector>
+
+using namespace std;
+
+void login() {
+    bool loginValue = true;
+    int iterations = 1;
+    string currentPassword;
+    string currentUsername;
+    string line;
+    string correctUsername;
+    string usernameInput;
+    bool passwordTest;
+    string correctPassword;
+    string passwordInput;
+    bool testPassword = true;
+
+    cout << "Enter your username: ";
+    cin >> usernameInput;
+    cout << "Enter your password: ";
+    cin >> passwordInput;
+
+    ifstream ofile;
+    ofile.open("username_password.csv", std::ios_base::app);
+    while (loginValue == true){
+        getline(ofile, line, ',');
+        cout << line << endl;
+        
+        if (iterations % 2 != 0){
+            currentUsername = line;
+        }
+
+        if (currentUsername == usernameInput){
+            currentUsername = correctUsername;
+            passwordTest = true;
+        }
+
+        if ((testPassword == true)){
+            if (passwordInput == line) {
+                cout << "You are logged in." << endl;
+                break;
+            }
+        }
+        if (passwordTest == true){
+            testPassword = true;
+        }
+        iterations += 1;
+        if (iterations == 100){
+            cout << "Your username or password is incorrect." << endl;
+            break;
+        }
+        }
+
+    ofile.close();
+}
+
+void save_info (string username, string password){
+    ifstream ifile;
+    ifile.open("username_password.csv");
+    if(ifile) {
+    }
+    else {
+        std::ofstream outfile ("username_password.csv");
+   }
+    ofstream ofile;
+    ofile.open("username_password.csv", std::ios_base::app);
+    vector <string> storage;
+    storage.push_back(username);
+    storage.push_back(password);
+	ofile << storage[0] << "," << storage[1] << "," <<  endl;
+    storage.clear();
+    ifile.close();
+    }
+
+ 
+void create_account() {
+    string username;
+    bool usernameValue = true;
+    string password;
+    bool passwordValue = true;
+    while (usernameValue == true){
+        cout << "Enter a username less than 15 characters:"<< endl;
+        cin >> username;
+        if (username.length() <= 15){
+            usernameValue = false;
+        }
+        else if  (username.length() > 15){
+            continue;
+        }
+    }
+
+    while (passwordValue == true) {
+        const regex pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-+_!@#$%^&*.,?]).+$");
+        cout << "Please enter a password with less than 20 characters containing an upper case letter, lower case letter, a number,and a symbol." << endl;
+        cin >> password;
+        cout << endl;
+
+        if (password.length() <= 20){
+            if (regex_match(password, pattern)){
+                cout < "You have created an account" << endl;
+                save_info(username, password);
+                passwordValue = false;
+                break;
+            }
+        }
+            else {
+                cout << "Your password must contain an upper case, lower case, number and special character" << endl;
+                continue;
+            }
+        
+        if ((password.length() > 20)){
+            cout << "Password is too long." << endl;
+        }
+         
+
+}
+}
+
+int main() {
+    while (1==1){
+        int select;
+        cout << "\nWould you like to login or register an account? \n[1] Login with an existing account\n[2] Create a new account\n[3] Exit" << endl;
+        cin >> select;
+
+        switch(select) {
+            case 1:
+                login();
+                break;
+            case 2:
+                create_account();
+                break;
+            case 3:
+                return 1;
+        }
+    }
+    return 0;
+}
 
