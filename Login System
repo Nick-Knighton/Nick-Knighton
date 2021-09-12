@@ -31,22 +31,22 @@ void login() {
         getline(ofile, line, ',');
         cout << line << endl;
         
-        if (iterations % 2 != 0){
+        if (iterations % 2 != 0){			//Odd iterations are the username,  even iterations are the password
             currentUsername = line;
         }
 
-        if (currentUsername == usernameInput){
+        if (currentUsername == usernameInput){		//Tests to see if username matches database
             currentUsername = correctUsername;
             passwordTest = true;
         }
 
-        if ((testPassword == true)){
+        if ((testPassword == true)){			//Tests to see if users password matches the username attached
             if (passwordInput == line) {
                 cout << "You are logged in." << endl;
                 break;
             }
         }
-        if (passwordTest == true){
+        if (passwordTest == true){			//Indicates that the next loop contains the password to be checked when true
             testPassword = true;
         }
         iterations += 1;
@@ -60,6 +60,7 @@ void login() {
 }
 
 void save_info (string username, string password){
+    //  Saves the info to a .csv file.  If the file doesnt exist it creates one
     ifstream ifile;
     ifile.open("username_password.csv");
     if(ifile) {
@@ -79,6 +80,7 @@ void save_info (string username, string password){
 
  
 void create_account() {
+    //Gets the users username and password
     string username;
     bool usernameValue = true;
     string password;
@@ -87,7 +89,7 @@ void create_account() {
         cout << "Enter a username less than 15 characters:"<< endl;
         cin >> username;
         if (username.length() <= 15){
-            usernameValue = false;
+            usernameValue = false;		// ends the loop if the username is the correct length
         }
         else if  (username.length() > 15){
             continue;
@@ -95,14 +97,14 @@ void create_account() {
     }
 
     while (passwordValue == true) {
-        const regex pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-+_!@#$%^&*.,?]).+$");
+        const regex pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-+_!@#$%^&*.,?]).+$");	//Creates checker for a number, upper case, lower case, and symbol
         cout << "Please enter a password with less than 20 characters containing an upper case letter, lower case letter, a number,and a symbol." << endl;
         cin >> password;
         cout << endl;
 
         if (password.length() <= 20){
             if (regex_match(password, pattern)){
-                cout < "You have created an account" << endl;
+                cout < "You have created an account" << endl;		//The user has entered a correct username and password
                 save_info(username, password);
                 passwordValue = false;
                 break;
@@ -127,6 +129,7 @@ int main() {
         cout << "\nWould you like to login or register an account? \n[1] Login with an existing account\n[2] Create a new account\n[3] Exit" << endl;
         cin >> select;
 
+	//Has the user select what they want to do 
         switch(select) {
             case 1:
                 login();
